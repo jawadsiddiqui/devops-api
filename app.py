@@ -10,7 +10,11 @@ app = Flask(__name__)
 # Connect to Redis
 redis_host = os.getenv('REDIS_HOST', 'localhost')
 redis_port = int(os.getenv('REDIS_PORT', 6379))
-redis_db = redis.StrictRedis(host=redis_host, port=redis_port, db=0, decode_responses=True)
+redis_db = redis.StrictRedis(
+    host=redis_host,
+    port=redis_port,
+    db=0,
+    decode_responses=True)
 
 # Metrics
 version_gauge = Gauge('api_version', 'Current API version')
@@ -18,6 +22,7 @@ health_gauge = Gauge('api_health', 'Health of the API')
 
 # API version
 VERSION = "0.1.0"
+
 
 @app.route('/')
 def root():
@@ -31,6 +36,7 @@ def root():
         "date": int(time.time()),
         "kubernetes": is_kubernetes
     })
+
 
 @app.route('/v1/tools/lookup', methods=['GET'])
 def lookup():
@@ -46,11 +52,13 @@ def lookup():
 
         # Log successful query
         redis_db.lpush('lookup_history', f"{domain}: {ipv4_addresses}")
-        redis_db.ltrim('lookup_history', 0, 19)  # Keep only the latest 20 entries
+        # Keep only the latest 20 entries
+        redis_db.ltrim('lookup_history', 0, 19)
 
         return jsonify({"domain": domain, "ipv4_addresses": ipv4_addresses})
     except socket.gaierror:
         return jsonify({"error": "Unable to resolve domain"}), 400
+
 
 @app.route('/v1/tools/validate', methods=['POST'])
 def validate():
@@ -68,21 +76,25 @@ def validate():
 
     return jsonify({"ip": ip, "valid": is_valid})
 
+
 @app.route('/v1/history', methods=['GET'])
 def history():
     # Retrieve the latest 20 saved queries from Redis
     history = redis_db.lrange('lookup_history', 0, 19)
     return jsonify({"history": history})
 
+
 @app.route('/metrics')
 def metrics():
     # Prometheus metrics endpoint
     return generate_latest(), 200
 
+
 @app.route('/health')
 def health():
     # Health check endpoint
     return jsonify({"status": "healthy"}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
