@@ -56,10 +56,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Build Docker Image with Latest Tag
+      - name: Build Docker Image
         run: |
-          TAG=$(git describe --tags --abbrev=0)
-          docker build -t devops-api:${TAG} .
+          docker build -t devops-api:latest .
+
   
   helm-package:
     name: Package Helm Chart
