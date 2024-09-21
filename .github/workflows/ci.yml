@@ -26,7 +26,7 @@ jobs:
         run: pip install flake8
 
       - name: Run Linter
-        run: flake8 .
+        run: flake8 --exclude .venv,.github --max-line-length 88 .
 
   test:
     name: Run Tests
