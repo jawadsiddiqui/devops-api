@@ -4,7 +4,7 @@ name: CI Pipeline for DevOps API
 
 on:
   push:
-    branch:
+    branches:
       - 'main'
     tags:
       - '*'
