@@ -4,7 +4,6 @@ import time
 import redis
 import os
 from prometheus_client import generate_latest, Gauge
-from flask_prometheus_metrics import register_metrics
 
 app = Flask(__name__)
 
@@ -24,6 +23,9 @@ VERSION = "0.1.0"
 def root():
     # Root endpoint that provides current date and version info
     is_kubernetes = os.getenv('KUBERNETES_SERVICE_HOST') is not None
+
+    version_gauge.set(1)
+
     return jsonify({
         "version": VERSION,
         "date": int(time.time()),

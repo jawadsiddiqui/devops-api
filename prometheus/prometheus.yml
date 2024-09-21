@@ -1,0 +1,9 @@
+# prometheus/prometheus.yml
+
+global:
+  scrape_interval: 15s  # How often Prometheus will scrape metrics
+
+scrape_configs:
+  - job_name: 'api'  # Identifies the API job
+    static_configs:
+      - targets: ['api:3000']  # Scrapes the `api` service on port 3000
