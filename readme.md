@@ -1,7 +1,7 @@
 # DevOps API
 
 ## Overview
-This project is a DevOps Engineer assignment featuring a Python-based REST API using Flask/FastAPI, PostgreSQL, and Prometheus for metrics. The API is fully Dockerized and Kubernetes-ready.
+This application is featuring a Python-based REST API using Flask/FastAPI, PostgreSQL, and Prometheus for metrics. The API is fully Dockerized and Kubernetes-ready with the following features
 
 ## Features
 - Resolve and validate IPv4 addresses for a given domain.
@@ -13,7 +13,7 @@ This project is a DevOps Engineer assignment featuring a Python-based REST API u
 - Docker
 - Docker Compose
 - Helm (for Kubernetes)
-- PostgreSQL
+- Redis (either running locally, in Docker, or in Kubernetes)
 
 ## Setup and Running Locally
 
@@ -58,9 +58,10 @@ This project is a DevOps Engineer assignment featuring a Python-based REST API u
     helm install devops-api ./helm/devops-api
     ```
 
-3. Ensure that Kubernetes secrets are set up before deployment:
+    If its already deployed then use below command to deploy latest helm
+
     ```bash
-    kubectl create secret generic db-secrets --from-literal=postgres_user=postgres --from-literal=postgres_password=secret_password
+    helm upgrade devops-api ./helm/devops-api
     ```
 
 ## CI Pipeline
@@ -75,7 +76,3 @@ You can view the pipeline in the `.github/workflows/ci.yml` file.
 ## Metrics and Monitoring
 
 Prometheus metrics are exposed via `/metrics`. To monitor the application, set up Prometheus to scrape these metrics.
-
-
-
-'' helm upgrade --install devops-api .\devops-api\
